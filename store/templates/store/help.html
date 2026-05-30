@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Help Center | EcoSphere</title>
+    <link rel="stylesheet" href="../static/css/homepage.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    
+</head>
+<body>
+
+
+    <!--navbar-->
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
+        <div class="container">
+
+
+           <!-- Logo -->
+            <a href="#" class="navbar-brand fw-bold text-success">EcoSphere</a>
+            
+            <!--toggle button for mobile nav -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#ecoNavbar">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+
+            <!-- navbar links-->
+            <div class="collapse navbar-collapse" id="ecoNavbar">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a href="homepage.html" class="nav-link">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="shop.html" class="nav-link">Shop</a>
+                    </li><li class="nav-item">
+                        <a href="categories.html" class="nav-link">Categories</a>
+                    </li><li class="nav-item">
+                        <a href="about.html" class="nav-link">About</a>
+                    </li><li class="nav-item">
+                        <a href="contact.html" class="nav-link">Contact</a>
+                    </li>
+                </ul>
+
+
+                <!--buttons-->
+                <div class="d-flex ms-lg-3">
+                    <a href="login.html" class="btn btn-outline-success me-2">Login</a>
+                    <a href="cart.html" class="btn btn-success">Cart</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+
+    <!--hero section-->
+    <section class="py-5 bg-light">
+
+        <div class="container text-center">
+            <h1 class="fw-bold">Help Center</h1>
+            <p class="text-muted mt-2">
+                We're here to help you with orders, payments, and eco-friendly products
+            </p>
+
+            <!--search-->
+
+            <div class="d-flex justify-content-center mt-4">
+                <input type="text" placeholder="search for help..." class="form-control w-50 me-2">
+                <button class="btn btn-success">Search</button>
+            </div>
+
+
+        </div>
+    </section>
+
+
+
+
+    <!--help categories section-->
+
+    <section class="py-5">
+        <div class="container">
+            <div class="row g-4 text-center">
+
+                <div class="col-md-4">
+                    <div class="card h-100 shadow-sm p-4">
+                        <i class="bi bi-box-seam fs-1 text-success"></i>
+                        <h5 class="fw-bold mt-3">Orders & Delivery</h5>
+                        <p class="text-muted">
+                            Track orders, delivery time, and shipping issues
+                        </p>
+                    </div>
+                </div>
+
+
+                <div class="col-md-4">
+                    <div class="card h-100 shadow-sm p-4">
+                        <i class="bi bi-person-circle fs-1 text-success"></i>
+                        <h5 class="fw-bold mt-3">Account & Login</h5>
+                        <p class="text-muted">
+                            Login issues, password reset, account settings
+                        </p>
+                    </div>
+                </div>
+
+
+
+                  <div class="col-md-4">
+                    <div class="card h-100 shadow-sm p-4">
+                        <i class="bi bi-credit-card fs-1 text-success"></i>
+                        <h5 class="fw-bold mt-3">Payments & Refunds</h5>
+                        <p class="text-muted">
+                            Payment methods, refunds, and failed transactions
+                        </p>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </section>
+    
+
+
+
+    <!--FAQ Section-->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <h2 class="fw-bold text-center mb-4">
+                Frequently Asked Questions
+            </h2>
+
+            <div class="accordion" id="faqAccordion">
+
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button" data-s-toggle="collapse" data-bs-target="#faq1">How can I track my order?</button>
+                    </h2>
+                    <div class="accordion-collapse collapse show" id="faq1">
+                        <div class="accordion-body">
+                            You can track your order from the "My orders" section in your account dashboard.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button" data-s-toggle="collapse" data-bs-target="#faq2">What payment methods are supported?</button>
+                    </h2>
+                    <div class="accordion-collapse collapse show" id="faq2">
+                        <div class="accordion-body">
+                            We support UPI, debit cards, credit cards, and net banking.
+                        </div>
+                    </div>
+                </div>
+
+<div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button" data-s-toggle="collapse" data-bs-target="#faq3">Are EcoSphere products 100% eco-friendly?</button>
+                    </h2>
+                    <div class="accordion-collapse collapse show" id="faq3">
+                        <div class="accordion-body">
+                            Yes, all products are verified for sustainability, recycled materials, or organic production.
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+
+
+    <!--contact support section-->
+    <section class="py-5">
+        <div class="container text-center">
+            <h2 class="fw-bold">Still Need Help?</h2>
+            <p class="text-muted mt-2">
+                Our support team is available 24/7 to assist you
+            </p>
+
+            <div class="mt-4">
+                <a href="contact.html" class="btn btn-success btn-lg me-3">Contact Support</a>
+                <a href="mailto: solankimihir1210@gmail.com" class="btn btn-outline-success btn-lg">Email Us</a>
+            </div>
+
+        </div>
+    </section>
+
+
+    <!---footer section-->
+    <footer class="footer-section pt-5 pb-4">
+        <div class="container">
+
+            <div class="row gy-4">
+
+                <!--brand Info-->
+                <div class="col-lg-4 col-md-6">
+                    <h4 class="fw-bold text-success mb-3">EcoSphere</h4>
+                    <p class="text-muted small">
+
+                        EcoSphere is your one-stop destination for sustainable, eco-friendly, and responsibly sourced products. shop consciously and build a greener future. 
+                    </p>
+
+                    <div class="d-flex gap-3 mt-3 social-icons">
+                        <a href="#"><span>🌐</span></a>
+                    <a href="#"><span>📘</span></a>
+                    <a href="#"><span>📸</span></a>
+                    <a href="#"><span>🐦</span></a>
+
+                    </div>
+                </div>
+
+                <!--quick links-->
+
+                <div class="col-lg-2 col-md-6">
+                    <h6 class="fw-semibold mb-3">Quick Links</h6>
+                    <ul class="list-unstyled footer-links">
+                        <li><a href="homepage.html">Home</a></li>
+                        <li><a href="shop.html">Shop</a></li>
+                        <li><a href="categories.html">Categories</a></li>
+                        <li><a href="shop.html">Featured Products</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+
+                    </ul>
+                </div>
+
+                <!--customer support-->
+                <div class="col-lg-3 col-md-6">
+                    <h6 class="fw-semibold mb-3">Customer Support</h6>
+                    <ul class="list-unstyled footer-links">
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">Shipping & Delivery</a></li>
+                        <li><a href="#">Returns & Refunds</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms & Conditions</a></li>
+
+                    </ul>
+                </div>
+
+                <!--contact Info-->
+
+                <div class="col-lg-3 col-md-6">
+                    <h6 class="fw-semibold mb-3">Contact Us</h6>
+                    <ul class="list-unstyled footer-contact small">
+                        <li>📍Gandhinagar, Gujarat, India</li>
+                        <li>📞 +91 9876543210</li>
+                        <li>✉support@ecosphere.com</li>
+                        <li>🕒 Mon - Sat: 9:00 AM - 7:00 PM</li>
+                    </ul>
+                </div>
+            </div>
+
+            <hr class="my-4">
+
+                <!--bottom footer-->
+                <div class="row align-items-center">
+                    <div class="col-md-6 text-center text-md-start small text-muted">
+                        © 2025 EcoSphere. All rights reserved.
+                    </div>
+
+                    <div class="col-md-6 text-center text-md-end small">
+                        <span class="text-muted">Made with 💚 for a sustainable future</span>
+                    </div>
+                </div>
+            
+        </div>
+    </footer>
+
+
+
+</body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+</html>

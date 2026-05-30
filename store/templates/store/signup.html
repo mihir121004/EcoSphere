@@ -1,0 +1,153 @@
+{% load static %}
+<title>Sign Up | EcoSphere</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/signup.css">
+
+{% block content %}
+    <!--Navbar-->
+    <nav class="navbar navbar-light bg-white shadow-sm fixed-top">
+        <div class="container">
+            <a href="homepage.html" class="navbar-brand fw-bold text-success">EcoSphere</a>
+            <a href="{%url 'home'%}" class="btn btn-outline-success btn-sm">Back to Home</a>
+        </div>
+    </nav>
+
+    <section class="auth-container d-flex align-items-center justify-content-center">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+
+                    <div class="row auth-card bg-white">
+
+                        <!--LEFT BRAND-->
+                        <div class="col-md-6 d-none d-md-flex auth-left align-items-center">
+                            <div>
+                                <div class="brand mb-3">
+                                    EcoSphere
+                                </div>
+                                <p class="fs-5">Join EcoSphere and start making sustainable choices today.</p>
+                            </div>
+                        </div>
+
+
+                        <!--form-->
+                        <div class="col-md-6 auth-right">
+                            <h3 class="fw-bold mb-4">Create Account</h3>
+
+                            <form action="{% url 'signup' %}" method="POST">
+                                {% csrf_token %}
+                                <div class="mb-3">
+                                    <label for="" class="form-label">Full Name</label>
+                                    <input type="text" class="form-control" name="username">
+                                </div>
+
+
+                                <div class="mb-3">
+                                    <label for="" class="form-label">Email Address</label>
+                                    <input type="email" class="form-control" name="email">
+                                </div>
+
+
+                                <div class="mb-3">
+                                    <label for="" class="form-label">Password</label>
+                                    <input type="password" class="form-control" name="password">
+                                </div>
+
+
+                                <div class="mb-3">
+                                    <label for="" class="form-label">Confirm Password</label>
+                                    <input type="password" class="form-control" name="password2">
+                                </div>
+
+                                <div class="form-check mb-4">
+                                    <input type="checkbox" class="form-check-input">
+                                    
+
+                                    <p class="small text-muted text-center mt-3">
+                                        By Continuing, you agree to our
+                                        <a href="#" data-bs-toggle="modal" data-bs-target="#termsModal">Terms of Service</a>
+                                        &
+                                        <a href="#" data-bs-toggle="modal" data-bs-target="#PrivacyModal">Privacy Policy</a>
+                                        </a>
+                                    </p>
+
+                                    </label>
+                                </div>
+
+
+                                <button class="btn btn-success w-100 btn-lg">
+                                    Sign Up
+                                </button>
+
+
+                                <p class="text-center text-muted mt-4">
+                                    Already have an account?
+                                    <a href="{% url 'login'%}" class="text-success fw-semibold text-decoration-none">Login</a>
+                                </p>
+
+                            </form>
+{% for message in messages %}
+<p>{{ message }}</p>
+{% endfor %}
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+<!--Terms Modal-->
+
+    <div class="modal fade" id="termsModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content rounded-4">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold">Terms & Conditions</h5>
+                    <button class="btn-close" type="button" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body" style="max-height: 60vh; overflow-y: auto;">
+                    <p>
+                        Welcome to EcoSphere. By using our services, you agree to follow these terms and conditions.
+                    </p>
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-success" data-bs-dismiss="modal">I understand</button>
+                </div>
+
+            </div>
+        </div>
+</div>
+
+        <!--privacy modal-->
+
+<div class="modal fade" id="PrivacyModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content rounded-3">
+            <div class="modal-header">
+                <h5 class="modal-title fw-bold">Privacy Policy</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" style="max-height: 60vh; overflow-y: auto;">
+                <p>
+                    EcoSphere respects your privacy. Your data is safe and never shared.
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success" data-bs-dismiss="modal">Got it</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+{% endblock %}
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>

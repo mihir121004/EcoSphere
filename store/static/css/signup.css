@@ -1,0 +1,36 @@
+body{
+    background: #f4f9f4;
+
+}
+
+.navbar-brand{
+    font-size: 25px;
+}
+
+.navbar{
+    height: 70px;
+}
+.auth-container{
+    min-height: 100vh;
+}
+
+.auth-card{
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+}
+
+.auth-left{
+    background: linear-gradient(135deg, #2e7d32, #66bb6a);
+    padding: 60px;
+    color: white;
+}
+
+.auth-right{
+    padding: 50px;
+}
+
+.brand{
+    font-size: 36px;
+    font-weight: bold;
+}

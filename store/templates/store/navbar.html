@@ -1,0 +1,72 @@
+{% load static %}
+
+
+
+<link rel="stylesheet" href="{% static 'css/homepage.css' %}">
+
+
+
+{% block content %}
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
+        <div class="container">
+
+
+           <!-- Logo -->
+            <a href="/" class="navbar-brand fw-bold text-success">EcoSphere</a>
+            
+            <!--toggle button for mobile nav -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#ecoNavbar">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+
+            <!-- navbar links-->
+            <div class="collapse navbar-collapse" id="ecoNavbar">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a href="{% url 'home'%}" class="nav-link">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'shop' %}" class="nav-link ">Shop</a>
+                    </li><li class="nav-item">
+                        <a href="{% url 'categories' %}" class="nav-link">Categories</a>
+                    </li><li class="nav-item">
+                        <a href="{%url 'about' %}" class="nav-link">About</a>
+                    </li><li class="nav-item">
+                        <a href="{%url 'contact'%}" class="nav-link">Contact</a>
+                    </li>
+                </ul>
+
+
+                <!--buttons-->
+                <div class="d-flex ms-lg-3">
+                   
+                    {%if user.is_authenticated %}
+                    <span class="me-3 fw-semibold text-success align-self-center">
+                        Hi, {{user.username}}
+                    </span>
+
+                    <a href="{% url 'cart' %}" class="btn btn-success me-2">
+                        Cart
+                    </a>
+
+                   <form action="{% url 'logout'%}" method="POST">
+                    {% csrf_token %}
+                    <button class="btn btn-danger" type="submit">
+                        Logout
+                    </button>
+                   </form>
+                    {%else%}
+                    <a href="{% url 'login'%}" class="btn btn-outline-success me-2">
+                        Login
+                    </a>
+
+                    <a href="{%url 'cart'%}" class="btn btn-success">
+                        Cart
+                    </a>
+                    {%endif%}
+                </div>
+            </div>
+        </div>
+    </nav>
+    {% endblock %}

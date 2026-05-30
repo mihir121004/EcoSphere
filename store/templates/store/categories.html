@@ -1,0 +1,144 @@
+{% extends 'store/base.html' %}
+
+    {% block title %}Categories | EcoSphere {% endblock %}
+    
+    <link rel="stylesheet" href="../static/css/homepage.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    
+
+
+    
+    {% block content %}
+    <!--page header-->
+    <section class="categories-header py-5 bg-light">
+        <div class="container text-center">
+            <h1 class="fw-bold">Product Categories</h1>
+            <p class="text-muted">
+                Explore eco-friendly categories crafted for sustainable living.
+            </p>
+        </div>
+    </section>
+
+
+    <!--main part{category grid}-->
+    <section class="py-5">
+        <div class="container">
+            <div class="row g-4">
+
+
+                <!--category card-->
+                <div class="col-md-6 col-lg-3">
+                    <div class="category-page-card text-center h-100">
+                        <div class="category-icon mb-3">🏡</div>
+                        <h5 class="fw-semibold">Home & Living</h5>
+                        <p class="text-muted small">
+                            Bamboo products, eco cleaners, compostable essentials
+                        </p>
+                        <a href="{%url 'shop' %}" class="btn btn-outline-success btn-sm mt-2">View Products</a>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-3">
+                <div class="category-page-card text-center h-100">
+                    <div class="category-icon mb-3">🧴</div>
+                    <h5 class="fw-semibold">Personal Care</h5>
+                    <p class="text-muted small">
+                        Organic soaps, shampoos, hygiene essentials
+                    </p>
+                    <a href="{%url 'shop' %}" class="btn btn-outline-success btn-sm mt-2">View Products</a>
+                </div>
+            </div>
+
+
+            <div class="col-md-6 col-lg-3">
+                <div class="category-page-card text-center h-100">
+                    <div class="category-icon mb-3">👕</div>
+                    <h5 class="fw-semibold">Clothing & Accessories</h5>
+                    <p class="text-muted small">
+                        Organic cotton wear and recycled fashion
+                    </p>
+                    <a href="{%url 'shop' %}" class="btn btn-outline-success btn-sm mt-2">View Products</a>
+
+                </div>
+            </div>
+
+
+            <div class="col-md-6 col-lg-3">
+                <div class="category-page-card text-center h-100">
+                    <div class="category-icon mb-3">♻</div>
+                    <h5 class="fw-semibold">Reusable Products</h5>
+                    <p class="text-muted small">
+                        Bottles, bags, straws and containers
+                    </p>
+                    <a href="{%url 'shop' %}" class="btn btn-outline-success btn-sm mt-2">View Products</a>
+
+                </div>
+            </div>
+
+
+
+            <div class="col-md-6 col-lg-3">
+                <div class="category-page-card text-center h-100">
+                    <div class="category-icon mb-3">⚡</div>
+                    <h5 class="fw-semibold">Eco Electronics</h5>
+                    <p class="text-muted small">
+                        Solar gadgets and energy-efficient products
+                    </p>
+                    <a href="{%url 'shop' %}" class="btn btn-outline-success btn-sm mt-2">View Products</a>
+
+                </div>
+            </div>
+
+
+
+            <div class="col-md-6 col-lg-3">
+                <div class="category-page-card text-center h-100">
+                    <div class="category-icon mb-3">📒</div>
+                    <h5 class="fw-semibold">Sustainable Stationery</h5>
+                    <p class="text-muted small">
+                        Recycled notebooks and plantable pens
+                    </p>
+                    <a href="{%url 'shop' %}" class="btn btn-outline-success btn-sm mt-2">View Products</a>
+
+                </div>
+            </div>
+
+
+
+            <div class="col-md-6 col-lg-3">
+                <div class="category-page-card text-center h-100">
+                    <div class="category-icon mb-3">🍽</div>
+                    <h5 class="fw-semibold">Kitchen & Food</h5>
+                    <p class="text-muted small">
+                        Organic foods items and resuable kitchenware
+                    </p>
+                    <a href="{%url 'shop' %}" class="btn btn-outline-success btn-sm mt-2">View Products</a>
+
+                </div>
+            </div>
+
+
+
+
+            <div class="col-md-6 col-lg-3">
+                <div class="category-page-card text-center h-100">
+                    <div class="category-icon mb-3">🎨</div>
+                    <h5 class="fw-semibold">Handmade & Upcycled</h5>
+                    <p class="text-muted small">
+                        Handcrafted decor and upcycled products
+                    </p>
+                    <a href="{%url 'shop' %}" class="btn btn-outline-success btn-sm mt-2">View Products</a>
+
+                </div>
+            </div>
+
+            </div>
+
+            
+
+        </div>
+    </section>
+{% endblock %}
+       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+

@@ -1,0 +1,85 @@
+{% load static %}
+    <title>Login | EcoSphere</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/login.css">
+
+    {% block content %}
+    <!--navbar-->
+
+    <nav class="navbar navbar-light bg-white shadow-sm fixed-top">
+        <div class="container">
+            <!--logo-->
+            <a href="homepage.html" class="navbar-brand fw-bold text-success">EcoSphere</a>
+
+            <!--Home Link-->
+            <a href="{%url 'home' %}" class="btn btn-outline-success btn-sm">
+                Back to Home
+            </a>
+
+        </div>
+    </nav>
+
+
+   <section class="auth-container d-flex align-items-center justify-content-center">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+
+                <div class="row auth-card bg-white">
+
+                    <!--LEFT BRANDING-->
+                        <div class="col-md-6 d-none d-md-flex auth-left align-items-center">
+                            <div>
+                                <div class="brand mb-3">
+                                    EcoSphere
+                                </div>
+                                <p class="fs-5">
+                                    Login to continue your sustainable shopping journey.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!--RIGHT FORM-->
+                        <div class="col-md-6 auth-right">
+                            <h3 class="fw-bold mb-4">Login</h3>
+
+                            <form method="POST" action="{% url 'login' %}">
+                                {% csrf_token %}
+                                <div class="mb-3">
+                                    <label class="form-label">Username</label>
+                                    <input type="text" name="username"class="form-control" placeholder="Enter your username">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Password</label>
+                                    <input type="password" name="password" class="form-control" placeholder="********">
+                                </div>
+
+                                <div class="d-flex justify-content-between mb-4">
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input">
+                                        <label for="" class="form-check-label">Remember me</label>
+                                    </div>
+                                    <a href="forgot-password.html" class="text-success text-decoration-none">Forgot Password?</a>
+                                </div>
+
+                                <button class="btn btn-success w-100 btn-lg">Login</button>
+                                <p class="text-center text-muted mt-4">Don't have an account?</p>
+                                <a href="{% url 'signup' %}" class="text-success fw-semibold text-decoration-none">Sign Up</a>
+                            </form>
+
+                            {% for message in messages %}
+                            <p>{{ message }}</p>
+                            {% endfor %}
+                        </div>
+
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+   </section> 
+{% endblock %}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>

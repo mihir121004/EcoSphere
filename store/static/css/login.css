@@ -1,0 +1,54 @@
+body{
+    background: #f4f9f4;
+} 
+
+.navbar{
+    height: 70px;
+}
+
+.auth-container{
+    min-height: 100vh;
+}
+.auth-card{
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+}
+
+.auth-left{
+    background: linear-gradient(135deg, #198754, #43a047);
+    color: white;
+    padding: 60px;
+}
+
+.auth-right{
+    padding: 50px;
+}
+
+.form-control:focus{
+    box-shadow: none;
+    border-color: #198754;
+}
+
+.brand{
+    font-size: 32px;
+    font-weight: bold;
+}
+
+
+/* forgot-password.html styling */ 
+
+.card{
+    animation: fadeIn 0.4s ease-in-out;
+}
+
+@keyframes fadeIn{
+    from{
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to{
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
