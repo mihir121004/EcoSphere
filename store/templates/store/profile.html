@@ -1,0 +1,148 @@
+{% extends 'store/base.html' %}
+{% load static %}
+
+{% block title %}Profile - EcoSphere{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/profile.css' %}">
+<style>
+    .profile-container {
+        max-width: 1200px;
+        margin: 2rem auto;
+        padding: 0 1rem;
+    }
+    .profile-header {
+        background: linear-gradient(135deg, #28a745, #20c997);
+        color: white;
+        padding: 2rem;
+        border-radius: 10px;
+        margin-bottom: 2rem;
+        text-align: center;
+    }
+    .profile-tabs {
+        margin-bottom: 2rem;
+    }
+    .tab-content {
+        background: white;
+        padding: 2rem;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    .order-card {
+        border: 1px solid #e9ecef;
+        border-radius: 8px;
+        padding: 1rem;
+        margin-bottom: 1rem;
+    }
+    .order-status {
+        padding: 0.25rem 0.5rem;
+        border-radius: 4px;
+        font-size: 0.875rem;
+        font-weight: bold;
+    }
+    .status-pending { background-color: #fff3cd; color: #856404; }
+    .status-confirmed { background-color: #d1ecf1; color: #0c5460; }
+    .status-shipped { background-color: #d4edda; color: #155724; }
+    .status-delivered { background-color: #d1ecf1; color: #0c5460; }
+    .change-password-form {
+        max-width: 500px;
+        margin: 0 auto;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="profile-container">
+    <div class="profile-header">
+        <h1>Welcome, {{ user.username }}!</h1>
+        <p>Manage your account and view your orders</p>
+    </div>
+
+    <ul class="nav nav-tabs profile-tabs" id="profileTab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab">Profile</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="current-orders-tab" data-bs-toggle="tab" data-bs-target="#current-orders" type="button" role="tab">Current Orders</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="previous-orders-tab" data-bs-toggle="tab" data-bs-target="#previous-orders" type="button" role="tab">Previous Orders</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="change-password-tab" data-bs-toggle="tab" data-bs-target="#change-password" type="button" role="tab">Change Password</button>
+        </li>
+    </ul>
+
+    <div class="tab-content" id="profileTabContent">
+        <!-- Profile Tab -->
+        <div class="tab-pane fade show active" id="profile" role="tabpanel">
+            <h3>Your Profile Information</h3>
+            <div class="row">
+                <div class="col-md-6">
+                    <p><strong>Username:</strong> {{ user.username }}</p>
+                    <p><strong>Email:</strong> {{ user.email }}</p>
+                    <p><strong>Date Joined:</strong> {{ user.date_joined|date:"F j, Y" }}</p>
+                    <p><strong>Last Login:</strong> {{ user.last_login|date:"F j, Y, g:i a" }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Current Orders Tab -->
+        <div class="tab-pane fade" id="current-orders" role="tabpanel">
+            <h3>Your Current Orders</h3>
+            {% if current_orders %}
+                {% for order in current_orders %}
+                    <div class="order-card">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5>Order #{{ order.order_id }}</h5>
+                            <span class="order-status status-{{ order.status }}">{{ order.status|title }}</span>
+                        </div>
+                        <p><strong>Total:</strong> ${{ order.total }}</p>
+                        <p><strong>Payment Method:</strong> {{ order.payment_method|title }}</p>
+                        <p><strong>Payment Status:</strong> {{ order.payment_status|title }}</p>
+                        <p><strong>Ordered on:</strong> {{ order.created_at|date:"F j, Y, g:i a" }}</p>
+                        <a href="{% url 'order_tracking' order.order_id %}" class="btn btn-primary btn-sm">Track Order</a>
+                        <a href="{% url 'invoice' order.order_id %}" class="btn btn-secondary btn-sm">View Invoice</a>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>You have no current orders.</p>
+            {% endif %}
+        </div>
+
+        <!-- Previous Orders Tab -->
+        <div class="tab-pane fade" id="previous-orders" role="tabpanel">
+            <h3>Your Previous Orders</h3>
+            {% if previous_orders %}
+                {% for order in previous_orders %}
+                    <div class="order-card">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5>Order #{{ order.order_id }}</h5>
+                            <span class="order-status status-delivered">Delivered</span>
+                        </div>
+                        <p><strong>Total:</strong> ${{ order.total }}</p>
+                        <p><strong>Payment Method:</strong> {{ order.payment_method|title }}</p>
+                        <p><strong>Delivered on:</strong> {{ order.updated_at|date:"F j, Y, g:i a" }}</p>
+                        <a href="{% url 'invoice' order.order_id %}" class="btn btn-secondary btn-sm">View Invoice</a>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>You have no previous orders.</p>
+            {% endif %}
+        </div>
+
+        <!-- Change Password Tab -->
+        <div class="tab-pane fade" id="change-password" role="tabpanel">
+            <h3>Change Your Password</h3>
+            <p>Click the button below to change your password securely.</p>
+            <a href="{% url 'password_change' %}" class="btn btn-success">Go to Password Change Page</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Add any JavaScript for profile page here
+</script>
+{% endblock %}

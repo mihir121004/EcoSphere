@@ -1,0 +1,111 @@
+{% extends 'store/base.html' %}
+{% load static %}
+
+{% block title %}Returns & Refunds - EcoSphere{% endblock %}
+
+{% block css %}
+<style>
+    .returns-container {
+        max-width: 1200px;
+        margin: 2rem auto;
+        padding: 0 1rem;
+    }
+    .returns-header {
+        background: linear-gradient(135deg, #28a745, #20c997);
+        color: white;
+        padding: 2rem;
+        border-radius: 10px;
+        margin-bottom: 2rem;
+        text-align: center;
+    }
+    .returns-info {
+        background: white;
+        padding: 2rem;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        margin-bottom: 2rem;
+    }
+    .info-section {
+        margin-bottom: 2rem;
+    }
+    .info-section h3 {
+        color: #28a745;
+        margin-bottom: 1rem;
+    }
+    .highlight-box {
+        background: #f8f9fa;
+        padding: 1rem;
+        border-left: 4px solid #28a745;
+        margin-bottom: 1rem;
+    }
+    .warning-box {
+        background: #fff3cd;
+        border: 1px solid #ffeaa7;
+        padding: 1rem;
+        border-radius: 5px;
+        margin-bottom: 1rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="returns-container">
+    <div class="returns-header">
+        <h1>Returns & Refunds</h1>
+        <p>Our policy on returns, exchanges, and refunds</p>
+    </div>
+
+    <div class="returns-info">
+        <div class="info-section">
+            <h3>Return Policy</h3>
+            <div class="highlight-box">
+                <strong>Return Window:</strong> You can return items within 30 days of delivery.
+            </div>
+            <div class="highlight-box">
+                <strong>Condition:</strong> Items must be unused, in their original packaging, and with all tags attached.
+            </div>
+            <p>We want you to be completely satisfied with your purchase. If you're not happy with your order, you can return it for a full refund or exchange.</p>
+        </div>
+
+        <div class="info-section">
+            <h3>How to Initiate a Return</h3>
+            <ol>
+                <li>Contact our customer support team with your order number and reason for return.</li>
+                <li>Receive a return authorization and shipping label.</li>
+                <li>Pack the item securely in its original packaging.</li>
+                <li>Ship the item back to us using the provided label.</li>
+                <li>Once received, we'll process your refund or exchange within 5-7 business days.</li>
+            </ol>
+        </div>
+
+        <div class="info-section">
+            <h3>Refund Process</h3>
+            <p>Refunds are processed to the original payment method. Please allow 5-7 business days for the refund to appear in your account. Shipping charges are non-refundable unless the return is due to our error.</p>
+        </div>
+
+        <div class="info-section">
+            <h3>Exchanges</h3>
+            <p>If you'd like to exchange an item for a different size, color, or product, we'll be happy to assist. Exchange shipping costs may apply depending on the circumstances.</p>
+        </div>
+
+        <div class="info-section">
+            <h3>Non-Returnable Items</h3>
+            <div class="warning-box">
+                The following items cannot be returned:
+                <ul>
+                    <li>Personal care items</li>
+                    <li>Custom or personalized products</li>
+                    <li>Items damaged due to misuse</li>
+                    <li>Items without original packaging or tags</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="info-section">
+            <h3>Contact Us</h3>
+            <p>If you have any questions about returns or need to initiate a return, please contact our customer support team. We're here to help!</p>
+            <a href="{% url 'contact' %}" class="btn btn-success">Contact Support</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

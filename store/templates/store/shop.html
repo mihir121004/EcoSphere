@@ -1,0 +1,163 @@
+{% extends 'store/base.html' %}
+{% load static %}
+
+
+
+    {% block title %}Shop | EcoSphere {% endblock %}
+    
+    
+    
+    {% block css %}
+    {% endblock %}
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    
+
+    {% block content %}
+    <section class="py-5">
+        <div class="container">
+            <div class="row">
+                <!-- Filters Toggle Button for Mobile -->
+                <div class="d-lg-none mb-3">
+                    <button class="btn btn-outline-success w-100" type="button" data-bs-toggle="collapse" data-bs-target="#filtersSidebar" aria-expanded="false" aria-controls="filtersSidebar">
+                        <i class="bi bi-funnel-fill me-2"></i>Filters
+                    </button>
+                </div>
+
+                <!-- Filters Sidebar (left) -->
+                <div class="col-lg-3 mb-4">
+                    <div class="shop-filter p-4 shadow-sm rounded collapse d-lg-block" id="filtersSidebar">
+                        <h5 class="fw-semibold mb-3">Categories</h5>
+                        <ul class="list-unstyled filter-list">
+                            <li><a href="{% url 'shop' %}{% if current_price_range %}?price_range={{ current_price_range }}{% endif %}" class="list-group-item category-all{% if not current_category %} active{% endif %}">
+                                <i class="bi bi-grid-3x3-gap me-2"></i>All Products
+                            </a></li>
+                            {% for category in categories %}
+                            <li><a href="{% url 'shop' %}?category={{ category.id }}{% if current_price_range %}&price_range={{ current_price_range }}{% endif %}" class="list-group-item category-{{ category.id }}{% if current_category == category.id|stringformat:'s' %} active{% endif %}">
+                                {% if category.name == "Clothing & Accessories" %}
+                                    <i class="bi bi-person-standing me-2"></i>
+                                {% elif category.name == "Eco-Friendly Electronics" %}
+                                    <i class="bi bi-lightning-charge me-2"></i>
+                                {% elif category.name == "Handmade & Upcycled Items" %}
+                                    <i class="bi bi-palette me-2"></i>
+                                {% elif category.name == "Home & Living" %}
+                                    <i class="bi bi-house-door me-2"></i>
+                                {% elif category.name == "Kitchen & Food Products" %}
+                                    <i class="bi bi-cup-hot me-2"></i>
+                                {% elif category.name == "Personal Care & Hygiene" %}
+                                    <i class="bi bi-heart me-2"></i>
+                                {% elif category.name == "Reusable Products" %}
+                                    <i class="bi bi-recycle me-2"></i>
+                                {% elif category.name == "Sustainable Stationery" %}
+                                    <i class="bi bi-pencil me-2"></i>
+                                {% else %}
+                                    <i class="bi bi-tag me-2"></i>
+                                {% endif %}
+                                {{ category.name }}
+                            </a></li>
+                            {% endfor %}
+                        </ul>
+
+                        <hr>
+
+                        <h5 class="fw-semibold mb-3">Price Range</h5>
+                        <form method="get" id="priceFilterForm">
+                            {% if current_category %}
+                            <input type="hidden" name="category" value="{{ current_category }}">
+                            {% endif %}
+                            <div class="form-check">
+                                <input type="radio" class="form-check-input" id="price1" name="price_range" value="" {% if not current_price_range %}checked{% endif %}>
+                                <label class="form-check-label" for="price1">All Prices</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="radio" class="form-check-input" id="price2" name="price_range" value="under_500" {% if current_price_range == 'under_500' %}checked{% endif %}>
+                                <label class="form-check-label" for="price2">Under ₹500</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="radio" class="form-check-input" id="price3" name="price_range" value="500_1000" {% if current_price_range == '500_1000' %}checked{% endif %}>
+                                <label class="form-check-label" for="price3">₹500 – ₹1000</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="radio" class="form-check-input" id="price4" name="price_range" value="above_1000" {% if current_price_range == 'above_1000' %}checked{% endif %}>
+                                <label class="form-check-label" for="price4">Above ₹1000</label>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Products Grid (right) -->
+                <div class="col-lg-9">
+                    <div class="row g-4">
+                        {% for product in products %}
+                        <div class="col-6 col-md-4 col-lg-4">
+                            <div class="product-card h-100">
+                                <!-- Product Image -->
+                                <img src="{{ product.image.url }}" alt="{{ product.name }}" class="img-fluid product-img">
+                                <div class="p-3">
+                                    <h6 class="fw-semibold">{{ product.name }}</h6>
+                                    <p class="text-muted small mb-2">{{ product.category.name }}</p>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span class="fw-bold text-success">₹{{ product.price }}</span>
+                                        <button class="btn btn-success btn-sm add-to-cart" data-product-id="{{ product.id }}">
+                                            <i class="bi bi-cart-plus me-1"></i>Add to Cart
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <div class="col-12">
+                            <div class="text-center py-5">
+                                <i class="bi bi-search text-muted" style="font-size: 3rem;"></i>
+                                <h5 class="text-muted mt-3">No products found</h5>
+                                <p class="text-muted">Try adjusting your filters or check back later.</p>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+<script>
+    // Auto-submit price filter form when radio buttons change
+    document.querySelectorAll('input[name="price_range"]').forEach(radio => {
+        radio.addEventListener('change', function() {
+            document.getElementById('priceFilterForm').submit();
+        });
+    });
+
+    document.querySelectorAll(".add-to-cart").forEach(btn => {
+    btn.addEventListener("click", function () {
+        const productId = this.dataset.productId;
+        const originalText = this.innerHTML;
+
+        fetch(`/add-to-cart/${productId}/`, {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": "{{ csrf_token }}",
+                "Content-Type": "application/x-www-form-urlencoded"
+            }
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                this.innerHTML = '<i class="bi bi-check-circle me-1"></i>1 quantity added to the cart';
+                setTimeout(() => {
+                    this.innerHTML = originalText;
+                }, 3000);
+            } else {
+                alert("Please login first");
+                window.location.href = "{% url 'login' %}";
+            }
+        });
+    });
+});
+</script>
+    {% endblock %}
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+    

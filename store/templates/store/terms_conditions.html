@@ -1,0 +1,120 @@
+{% extends 'store/base.html' %}
+{% load static %}
+
+{% block title %}Terms & Conditions - EcoSphere{% endblock %}
+
+{% block css %}
+<style>
+    .terms-container {
+        max-width: 1200px;
+        margin: 2rem auto;
+        padding: 0 1rem;
+    }
+    .terms-header {
+        background: linear-gradient(135deg, #28a745, #20c997);
+        color: white;
+        padding: 2rem;
+        border-radius: 10px;
+        margin-bottom: 2rem;
+        text-align: center;
+    }
+    .terms-content {
+        background: white;
+        padding: 2rem;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    .section {
+        margin-bottom: 2rem;
+    }
+    .section h3 {
+        color: #28a745;
+        margin-bottom: 1rem;
+        border-bottom: 2px solid #e9ecef;
+        padding-bottom: 0.5rem;
+    }
+    .highlight-box {
+        background: #f8f9fa;
+        padding: 1rem;
+        border-left: 4px solid #28a745;
+        margin-bottom: 1rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="terms-container">
+    <div class="terms-header">
+        <h1>Terms & Conditions</h1>
+        <p>Please read these terms carefully before using our services</p>
+    </div>
+
+    <div class="terms-content">
+        <div class="section">
+            <h3>Acceptance of Terms</h3>
+            <p>By accessing and using EcoSphere's website and services, you accept and agree to be bound by the terms and provision of this agreement. If you do not agree to abide by the above, please do not use this service.</p>
+        </div>
+
+        <div class="section">
+            <h3>Use License</h3>
+            <p>Permission is granted to temporarily download one copy of the materials on EcoSphere's website for personal, non-commercial transitory viewing only. This is the grant of a license, not a transfer of title, and under this license you may not:</p>
+            <ul>
+                <li>Modify or copy the materials</li>
+                <li>Use the materials for any commercial purpose or for any public display</li>
+                <li>Attempt to decompile or reverse engineer any software contained on EcoSphere's website</li>
+                <li>Remove any copyright or other proprietary notations from the materials</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h3>User Accounts</h3>
+            <p>When you create an account with us, you must provide information that is accurate, complete, and current at all times. You are responsible for safeguarding the password and for all activities that occur under your account.</p>
+            <div class="highlight-box">
+                You agree not to disclose your password to any third party. You must notify us immediately upon becoming aware of any breach of security or unauthorized use of your account.
+            </div>
+        </div>
+
+        <div class="section">
+            <h3>Products and Services</h3>
+            <p>All products and services are subject to availability. We reserve the right to discontinue any product or service at any time. Prices for our products are subject to change without notice.</p>
+            <p>We have made every effort to display as accurately as possible the colors and images of our products. We cannot guarantee that your computer monitor's display of any color will be accurate.</p>
+        </div>
+
+        <div class="section">
+            <h3>Billing and Account Information</h3>
+            <p>You agree to provide current, complete, and accurate purchase and account information for all purchases made at our store. You agree to promptly update your account and other information, including your email address and credit card numbers and expiration dates, so that we can complete your transactions and contact you as needed.</p>
+        </div>
+
+        <div class="section">
+            <h3>Prohibited Uses</h3>
+            <p>You may not use our products for any illegal or unauthorized purpose nor may you, in the use of the Service, violate any laws in your jurisdiction (including but not limited to copyright laws).</p>
+        </div>
+
+        <div class="section">
+            <h3>Accuracy of Information</h3>
+            <p>We are not responsible if information made available on this site is not accurate, complete, or current. The material on this site is provided for general information only and should not be relied upon or used as the sole basis for making decisions without consulting primary, more accurate, more complete, or more timely sources of information.</p>
+        </div>
+
+        <div class="section">
+            <h3>Modifications to Terms</h3>
+            <p>We reserve the right, at our sole discretion, to modify or replace these Terms at any time. If a revision is material, we will try to provide at least 30 days notice prior to any new terms taking effect.</p>
+        </div>
+
+        <div class="section">
+            <h3>Governing Law</h3>
+            <p>These Terms shall be interpreted and governed by the laws of the jurisdiction in which EcoSphere operates, without regard to its conflict of law provisions.</p>
+        </div>
+
+        <div class="section">
+            <h3>Contact Information</h3>
+            <p>Questions about the Terms should be sent to us at:</p>
+            <ul>
+                <li>Email: legal@ecosphere.com</li>
+                <li>Phone: 1-800-ECO-SPHERE</li>
+                <li>Address: 123 Green Street, Eco City, EC 12345</li>
+            </ul>
+            <a href="{% url 'contact' %}" class="btn btn-success">Contact Us</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
