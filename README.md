@@ -105,3 +105,32 @@ EcoSphere is a Django-based web application for browsing eco-friendly products, 
 
 Add your license here (or remove this section).
 
+## Deploy to Render (Free)
+
+The repo is pre-configured for one-click deployment via Render Blueprint.
+
+### Option A — Blueprint (recommended)
+1. Push this repo to GitHub.
+2. Go to https://dashboard.render.com → **New** → **Blueprint** → select the repo.
+3. Render reads `render.yaml` and creates:
+   - a free web service (gunicorn + WhiteNoise)
+   - a free PostgreSQL database (`DATABASE_URL` is wired automatically)
+4. Optional: fill in `DJANGO_SUPERUSER_USERNAME` / `DJANGO_SUPERUSER_EMAIL` / `DJANGO_SUPERUSER_PASSWORD` when prompted to get an admin account created on first build.
+5. Deploy. Done.
+
+### Option B — Manual
+1. **New** → **Web Service** → connect the repo.
+2. Runtime: Python · Build: `./build.sh` · Start: `gunicorn ecosphere.wsgi:application --bind 0.0.0.0:$PORT`
+3. Add env vars: `PYTHON_VERSION=3.14.0`, `DEBUG=False`, `SECRET_KEY=<random>`, plus `DJANGO_SUPERUSER_*` if you want an admin.
+4. **New** → **Postgres** (free) and copy its *Internal Database URL* into the web service's `DATABASE_URL` var.
+
+### How it works on Render
+- `build.sh` installs deps → `collectstatic` → `migrate` → seeds the 29-product catalogue (idempotent) → optionally creates the superuser.
+- Static files are served by **WhiteNoise** (no CDN needed).
+- Product images ship **inside the git repo** (`media/products/`), so they survive Render's ephemeral disk on every deploy — the seeder references them by deterministic name.
+- Render free-tier notes: the web service sleeps after ~15 min idle (first visit is slow), and the free Postgres expires after 30 days — upgrade the DB plan or re-create it to keep data.
+
+### Local development
+Works exactly as before: `python manage.py runserver` uses SQLite + DEBUG=True with no env vars required.
+
+

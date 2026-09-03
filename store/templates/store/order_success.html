@@ -1,0 +1,54 @@
+{% extends "store/base.html" %}
+
+{% block title %}Order Confirmed | EcoSphere{% endblock %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-7">
+                <div class="card border-0 shadow-sm text-center p-5">
+                    <div class="mb-4">
+                        <span style="font-size: 4rem;">✅</span>
+                    </div>
+                    <h2 class="fw-bold text-success mb-3">Order Placed Successfully!</h2>
+                    <p class="text-muted mb-4">Thank you for shopping with EcoSphere. Your order has been confirmed.</p>
+
+                    <div class="bg-light rounded p-4 text-start mb-4">
+                        <h5 class="fw-bold mb-3">Order Details</h5>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="text-muted">Order ID</span>
+                            <span class="fw-semibold">#{{ order.id }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="text-muted">Order Date</span>
+                            <span class="fw-semibold">{{ order.created_at|date:"d M Y, h:i A" }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="text-muted">Status</span>
+                            <span class="badge bg-warning text-dark">{{ order.status }}</span>
+                        </div>
+                        <hr>
+                        {% for item in order.items.all %}
+                        <div class="d-flex justify-content-between mb-2 small">
+                            <span>{{ item.product.name }} x {{ item.quantity }}</span>
+                            <span>₹{{ item.subtotal }}</span>
+                        </div>
+                        {% endfor %}
+                        <hr>
+                        <div class="d-flex justify-content-between fw-bold fs-5">
+                            <span>Total Paid</span>
+                            <span class="text-success">₹{{ order.total_amount }}</span>
+                        </div>
+                    </div>
+
+                    <div class="d-grid gap-2 d-sm-flex justify-content-center">
+                        <a href="{% url 'shop' %}" class="btn btn-success">Continue Shopping</a>
+                        <a href="{% url 'home' %}" class="btn btn-outline-success">Back to Home</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

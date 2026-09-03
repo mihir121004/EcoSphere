@@ -1,81 +1,127 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Category, Product, Subscription
+from .models import Category, Product, Subscription, ContactMessage, Cart, CartItem, Order, OrderItem
 from django.contrib.auth.models import User
 from django.contrib import messages
-from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
+from django.contrib.auth import authenticate, login as auth_login
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.conf import settings
-from .models import ContactMessage
-from .models import Product, Cart, CartItem
 from django.http import JsonResponse
+from django.db.models import Count, Q, Sum
 
 
-
-# Create your views here.
+# ======================
+# Homepage
+# ======================
 def homepage(request):
     featured_products = Product.objects.filter(is_featured=True, is_available=True)[:4]
-    context = {
-        "featured_products": featured_products
-    }
-    
-    return render(request, "store/homepage.html",{
-        "featured_products": featured_products
-    })
+    return render(request, "store/homepage.html", {"featured_products": featured_products})
+
+
+# ======================
+# Shop with category & price filters
+# ======================
 def shop(request):
-    print("CATEGORY PARAM:", request.GET.get('category')
-          )
     category_id = request.GET.get('category')
+    price_filter = request.GET.get('price')
     categories = Category.objects.all()
-    
-    if category_id:
-        products = Product.objects.filter(category_id=category_id)
-    else:
-        products = Product.objects.all()
-        
+
     products = Product.objects.filter(is_available=True)
 
-    context = {
-        'categories' : categories,
-        'products' : products
-    }
-    
-    return render(request, 'store/shop.html', context)
+    if category_id:
+        try:
+            category_id = int(category_id)
+            products = products.filter(category_id=category_id)
+        except (ValueError, TypeError):
+            category_id = None
 
+    if price_filter == 'under_20':
+        products = products.filter(price__lt=20)
+    elif price_filter == '20_to_50':
+        products = products.filter(price__gte=20, price__lte=50)
+    elif price_filter == '50_to_100':
+        products = products.filter(price__gte=50, price__lte=100)
+    elif price_filter == 'above_100':
+        products = products.filter(price__gt=100)
+
+    return render(request, 'store/shop.html', {
+        'categories': categories,
+        'products': products,
+        'selected_category': category_id,
+        'selected_price': price_filter,
+    })
+
+
+# ======================
+# Categories
+# ======================
 def categories(request):
-    categories = Category.objects.all()
+    # Emoji icons matched to category names (fallback icon for new categories)
+    icon_map = {
+        'Personal Care': '🧴',
+        'Kitchen & Dining': '🍽',
+        'Home & Living': '🏡',
+        'Clothing & Accessories': '👕',
+        'Office Supplies': '📒',
+        'Outdoor & Sports': '🏕',
+        'Cleaning Products': '🧽',
+    }
+
+    categories = Category.objects.annotate(
+        product_count=Count('products', filter=Q(products__is_available=True))
+    ).order_by('name')
+
+    for category in categories:
+        category.icon = icon_map.get(category.name, '♻')
+
     return render(request, 'store/categories.html', {'categories': categories})
 
+
+# ======================
+# About
+# ======================
 def about(request):
     return render(request, 'store/about.html')
 
+
+# ======================
+# Login
+# ======================
 def login(request):
     if request.method == "POST":
-        username = request.POST.get('username')
-        password = request.POST.get('password')
+        username = request.POST.get('username', '').strip()
+        password = request.POST.get('password', '')
 
         user = authenticate(request, username=username, password=password)
-        print("AUTH USER:" , user)
-
         if user:
             auth_login(request, user)
             return redirect("home")
-        else:
-            messages.error(request, "Invalid username or password")
-            return redirect("login")
+        messages.error(request, "Invalid username or password")
+        return redirect("login")
     return render(request, "store/login.html")
 
-#logout view
-def logout_user(request):
-    logout(request)
-    return redirect("login")
 
+# ======================
+# Forgot Password
+# ======================
+def forgot_password(request):
+    if request.method == "POST":
+        email = request.POST.get("email", "").strip().lower()
+        # Always show the same message for security
+        messages.info(request, "If that email exists, a password reset link has been sent to it.")
+        return redirect("login")
+    return render(request, "store/forgot-password.html")
+
+
+# ======================
+# Signup
+# ======================
 def signup(request):
     if request.method == "POST":
-        username = request.POST.get('username')
-        email = request.POST.get('email')
-        password = request.POST.get('password')
-        password2 = request.POST.get('password2')
+        username = request.POST.get('username', '').strip()
+        email = request.POST.get('email', '').strip().lower()
+        password = request.POST.get('password', '')
+        password2 = request.POST.get('password2', '')
 
         if not all([username, email, password, password2]):
             messages.error(request, "All fields are required")
@@ -90,136 +136,252 @@ def signup(request):
             return redirect('signup')
 
         if User.objects.filter(email=email).exists():
-            messages.error(request, "Email already exists")
+            messages.error(request, "Email already registered")
             return redirect('signup')
 
-        user = User.objects.create_user(username=username, email=email, password=password)
-        user.save()
-
-        messages.success(request, "Account created successfully!")
+        User.objects.create_user(username=username, email=email, password=password)
+        messages.success(request, "Account created! Please login to continue.")
         return redirect('login')
 
     return render(request, 'store/signup.html')
-
-
+# ======================
+# Cart View
+# ======================
 @login_required(login_url='login')
 def cart_view(request):
-    cart, created = Cart.objects.get_or_create(user=request.user)
+    cart, _ = Cart.objects.get_or_create(user=request.user)
     items = CartItem.objects.filter(cart=cart)
-
-    total =sum(item.subtotal() for item in items)
+    total = sum(item.subtotal() for item in items)
 
     return render(request, "store/cart.html", {
         "cart_items": items,
-        "total": total
+        "total": total,
     })
-    
-@login_required
+
+
+# ======================
+# Add to Cart (AJAX)
+# ======================
 def add_to_cart(request, product_id):
-    product = get_object_or_404(Product, id=product_id)
+    if not request.user.is_authenticated:
+        return JsonResponse({"success": False, "auth": False}, status=401)
 
-    cart, _ = Cart.objects.get_or_create(user=request.user)
+    if request.method == "POST":
+        product = get_object_or_404(Product, id=product_id)
 
-    cart_item, created = CartItem.objects.get_or_create(
-        cart=cart,
-        product=product
-    )
-    if not created:
-        cart_item.quantity += 1
-        cart_item.save()
-    
-        return redirect('shop')        
-        
+        # Block adding if completely out of stock
+        if product.stock == 0:
+            return JsonResponse({"success": False, "error": "Out of stock"}, status=400)
+
+        cart, _ = Cart.objects.get_or_create(user=request.user)
+
+
+        cart_item, created = CartItem.objects.get_or_create(
+            cart=cart,
+            product=product
+        )
+        if not created:
+            # Cap quantity at available stock
+            if cart_item.product.stock == 0 or cart_item.quantity < cart_item.product.stock:
+                cart_item.quantity += 1
+                cart_item.save()
+            else:
+                return JsonResponse({"success": False, "error": "Out of stock"}, status=400)
+
+        cart_count = CartItem.objects.filter(cart=cart).aggregate(
+            total=Sum('quantity')
+        )['total'] or 0
+
+        return JsonResponse({"success": True, "cart_count": cart_count})
+    return JsonResponse({"success": False, "error": "Method not allowed"}, status=405)
+
+
+# ======================
+# Update Cart (AJAX)
+# ======================
 @login_required
 def update_cart(request):
     if request.method == "POST":
         item_id = request.POST.get("item_id")
         quantity = request.POST.get("quantity")
 
-        cart_item = CartItem.objects.get(id=item_id, cart__user=request.user)
-        cart_item.quantity = quantity
-        cart_item.save()
+        try:
+            qty = int(quantity)
+            if qty < 1:
+                qty = 1
 
-        return JsonResponse({"success":True})
-    return JsonResponse({"success": False})
-        
+            cart_item = CartItem.objects.select_related("product").get(id=item_id, cart__user=request.user)
 
+            # Cap quantity at available stock
+            if cart_item.product.stock > 0 and qty > cart_item.product.stock:
+                qty = cart_item.product.stock
+
+            cart_item.quantity = qty
+            cart_item.save()
+            return JsonResponse({"success": True})
+        except (CartItem. DoesNotExist, ValueError, TypeError):
+            return JsonResponse({"success": False, "error": "Invalid item"}, status=400)
+    return JsonResponse({"success": False, "error": "Method not allowed"}, status=405)
+
+
+# ======================
+# Remove from Cart (AJAX)
+# ======================
 def remove_from_cart(request):
     if not request.user.is_authenticated:
         return JsonResponse({"success": False, "auth": False}, status=401)
 
     if request.method == "POST":
         item_id = request.POST.get("item_id")
-
-        CartItem.objects.filter(
+        deleted, _ = CartItem.objects.filter(
             id=item_id,
             cart__user=request.user
         ).delete()
-
-        return JsonResponse({"success": True})
-
-    return JsonResponse({"success": False}, status=400)
-
-
+        if deleted:
+            return JsonResponse({"success": True})
+        return JsonResponse({"success": False, "error": "Item not found"}, status=404)
+    return JsonResponse({"success": False, "error": "Method not allowed"}, status=405)
+# ======================
+# Checkout
+# ======================
+@login_required
 def checkout(request):
-    cart_items = CartItem.objects.filter(cart__user=request.user)
+    cart, _ = Cart.objects.get_or_create(user=request.user)
+    cart_items = CartItem.objects.filter(cart=cart)
 
-    total = 0
-    # Add total_price field for each item
+    if not cart_items.exists():
+        messages.info(request, "Your cart is empty. Add some products first.")
+        return redirect("cart")
+
+    total = sum(item.subtotal() for item in cart_items)
+
     for item in cart_items:
-        item.total_price = item.product.price * item.quantity  # calculate price × quantity
-        total += item.total_price
 
-    context ={
+        item.total_price = item.product.price * item.quantity
+
+    context = {
         "cart_items": cart_items,
+
         "total": total,
     }
     return render(request, "store/checkout.html", context)
 
+
+# ======================
+# Place Order
+# ======================
 @login_required
 def place_order(request):
-    if request.method == "POST":
+    if request.method != "POST":
         return redirect("checkout")
 
+    cart = Cart.objects.filter(user=request.user).first()
+    if not cart or not cart.items.exists():
+        messages.error(request, "Your cart is empty.")
+        return redirect("cart")
+
+    total = sum(item.subtotal() for item in cart.items.all())
+
+    order = Order.objects.create(user=request.user, total_amount=total)
+
+
+    for item in cart.items.all():
+        OrderItem.objects.create(
+            order=order,
+            product=item.product,
+            quantity=item.quantity,
+            price=item.product.price,
+        )
+
+        # Decrement stock
+        product = item.product
+        if product.stock >= item.quantity:
+
+
+            product.stock -= item.quantity
+            product.save()
+        else:
+            product.is_available = False
+            product.save()
+
+
+
+
+    cart.items.all().delete()
+
+
+    messages.success(request, f"Order placed successfully! Order ID: #{order.id}.")
+
+    return redirect("order_success", order_id=order.id)
+
+
+# ======================
+# Order Success
+# ======================
+@login_required
+def order_success(request, order_id):
+    order = get_object_or_404(Order, id=order_id, user=request.user)
+
+
+    return render(request, "store/order_success.html", {"order": order})
+# ======================
+# Contact
+# ======================
 def contact(request):
     if request.method == "POST":
-        ContactMessage.objects.create(
-            name = request.POST.get("name"),
-            email=request.POST.get("email"),
-            subject=request.POST.get("subject"),
-            message=request.POST.get("message"),
-        )
-        
-        messages.success(request, "Your message has been sent successfully!")
+        name = request.POST.get("name", "").strip()
+        email = request.POST.get("email", "").strip()
+        subject = request.POST.get("subject", "").strip()
+        message = request.POST.get("message", "").strip()
+
+        if name and email and message:
+            ContactMessage.objects.create(
+                name=name,
+                email=email,
+                subject=subject,
+                message=message,
+            )
+            messages.success(request, "Your message has been sent successfully!")
+        else:
+            messages.error(request, "Please fill in your name, email,and message.")
+
         return redirect("contact")
 
     return render(request, "store/contact.html")
-    
 
+
+# ======================
+# Help
+# ======================
 def help(request):
     return render(request, 'store/help.html')
 
+
+# ======================
+# Newsletter Subscription
+# ======================
 def subscription(request):
     if request.method == "POST":
-        email = request.POST.get("email")
+        email = request.POST.get("email", "").strip().lower()
 
         if not email:
             messages.error(request, "Email is required")
             return redirect("home")
 
-        # Save subscription
         subscription, created = Subscription.objects.get_or_create(email=email)
 
-        # 🔔 SEND ADMIN NOTIFICATION (ONLY ON NEW SUBSCRIPTION)
+
+        # Send admin notification (only on new subscription)
         if created:
+
             send_mail(
-                subject="New Subscription",
+                subject="New EcoSphere Subscription",
                 message=f"A new user has subscribed: {email}",
                 from_email=settings.DEFAULT_FROM_EMAIL,
-                recipient_list=["admin@example.com"],
+                recipient_list=[settings.DEFAULT_FROM_EMAIL],
                 fail_silently=True,
             )
 
-        messages.success(request, "Subscribed successfully!")
+        messages.success(request, "Subscribed successfully! Thank you for joining.")
 
     return redirect("home")

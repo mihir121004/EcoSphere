@@ -10,7 +10,7 @@
     <nav class="navbar navbar-light bg-white shadow-sm fixed-top">
         <div class="container">
             <!--logo-->
-            <a href="homepage.html" class="navbar-brand fw-bold text-success">EcoSphere</a>
+            <a href="{% url 'home' %}" class="navbar-brand fw-bold text-success">EcoSphere</a>
 
             <!--Home Link-->
             <a href="{%url 'home' %}" class="btn btn-outline-success btn-sm">
@@ -61,7 +61,7 @@
                                         <input type="checkbox" class="form-check-input">
                                         <label for="" class="form-check-label">Remember me</label>
                                     </div>
-                                    <a href="forgot-password.html" class="text-success text-decoration-none">Forgot Password?</a>
+                                    <a href="{% url 'forgot_password' %}" class="text-success text-decoration-none">Forgot Password?</a>
                                 </div>
 
                                 <button class="btn btn-success w-100 btn-lg">Login</button>

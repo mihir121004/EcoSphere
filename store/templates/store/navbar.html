@@ -46,8 +46,13 @@
                         Hi, {{user.username}}
                     </span>
 
-                    <a href="{% url 'cart' %}" class="btn btn-success me-2">
+                    <a href="{% url 'cart' %}" class="btn btn-success me-2 position-relative">
                         Cart
+                        <span id="cart-badge"
+                              class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger{% if cart_item_count == 0 %} d-none{% endif %}">
+                            {{ cart_item_count }}
+                            <span class="visually-hidden">items in cart</span>
+                        </span>
                     </a>
 
                    <form action="{% url 'logout'%}" method="POST">
