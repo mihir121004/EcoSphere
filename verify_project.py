@@ -163,23 +163,41 @@ stock_before = p2.stock
 r = c.get("/checkout/")
 check("Checkout 200", r.status_code == 200)
 
-r = c.post("/place-order/", {"full_name": "Tester", "email": "t@e.com", "phone": "1234567890",
-                             "address": "1 Green St", "city": "Eco City", "pincode": "12345"}, follow=True)
+r = c.post("/place-order/", {"first_name": "Test", "last_name": "User", "email": "t@e.com",
+                             "phone": "1234567890", "address": "1 Green St", "city": "Eco City",
+                             "state": "Eco State", "pincode": "123456", "payment_method": "cod"}, follow=True)
 order = Order.objects.filter(user=User.objects.get(username="tester")).first()
 check("Order created", order is not None)
 if order:
-    check("Order total correct (49.99)", str(order.total_amount) == "49.99", f"total={order.total_amount}")
+    check("Order total correct (49.99)", str(order.total) == "49.99", f"total={order.total}")
+    check("Order id generated (ORD...)", order.order_id.startswith("ORD"), f"order_id={order.order_id}")
+    check("Order has billing details", order.first_name == "Test" and order.city == "Eco City")
     check("Order has 1 item", order.items.count() == 1)
 p2.refresh_from_db()
 check("Stock decremented", p2.stock == stock_before - 1, f"{stock_before} -> {p2.stock}")
 cart.refresh_from_db()
 check("Cart cleared after order", cart.items.count() == 0)
 
+# Order tracking / invoice pages
+if order:
+    r = c.get(f"/order-tracking/{order.order_id}/")
+    check("Order tracking page 200 + shows id", r.status_code == 200 and order.order_id.encode() in r.content)
+    r = c.get(f"/invoice/{order.order_id}/")
+    check("Invoice page 200", r.status_code == 200)
+r = c.get("/order-success/999/")
+check("Bad order id -> 404 (logged in)", r.status_code == 404)
+
 r = c.get("/cart/")
 check("Empty cart page renders", r.status_code == 200)
 
-r = c.get("/order-success/999/")
-check("Bad order id -> 404 (logged in)", r.status_code == 404)
+# New account pages (logged in)
+r = c.get("/profile/")
+check("Profile page 200", r.status_code == 200)
+r = c.get("/password_change/")
+check("Password change page 200", r.status_code == 200)
+for url in ["/help-center/", "/shipping-delivery/", "/returns-refunds/", "/privacy-policy/", "/terms-conditions/"]:
+    r = c.get(url)
+    check(f"Page {url} 200", r.status_code == 200, f"status={r.status_code}")
 
 print()
 print("=" * 60)

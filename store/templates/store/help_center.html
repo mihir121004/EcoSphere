@@ -1,0 +1,142 @@
+{% extends 'store/base.html' %}
+{% load static %}
+
+{% block title %}Help Center - EcoSphere{% endblock %}
+
+{% block css %}
+<style>
+    .help-container {
+        max-width: 1200px;
+        margin: 2rem auto;
+        padding: 0 1rem;
+    }
+    .help-header {
+        background: linear-gradient(135deg, #28a745, #20c997);
+        color: white;
+        padding: 2rem;
+        border-radius: 10px;
+        margin-bottom: 2rem;
+        text-align: center;
+    }
+    .faq-section {
+        margin-bottom: 2rem;
+    }
+    .faq-item {
+        border: 1px solid #e9ecef;
+        border-radius: 8px;
+        margin-bottom: 1rem;
+        overflow: hidden;
+    }
+    .faq-question {
+        background: #f8f9fa;
+        padding: 1rem;
+        cursor: pointer;
+        font-weight: bold;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .faq-answer {
+        padding: 1rem;
+        display: none;
+    }
+    .contact-section {
+        background: #f8f9fa;
+        padding: 2rem;
+        border-radius: 10px;
+        text-align: center;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="help-container">
+    <div class="help-header">
+        <h1>Help Center</h1>
+        <p>Find answers to common questions and get support</p>
+    </div>
+
+    <div class="faq-section">
+        <h2>Frequently Asked Questions</h2>
+
+        <div class="faq-item">
+            <div class="faq-question">
+                How do I place an order?
+                <span class="toggle-icon">+</span>
+            </div>
+            <div class="faq-answer">
+                To place an order, browse our products, add items to your cart, and proceed to checkout. You'll need to create an account or log in if you haven't already.
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question">
+                What payment methods do you accept?
+                <span class="toggle-icon">+</span>
+            </div>
+            <div class="faq-answer">
+                We accept Cash on Delivery (COD), UPI payments, and credit/debit card payments for your convenience.
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question">
+                How can I track my order?
+                <span class="toggle-icon">+</span>
+            </div>
+            <div class="faq-answer">
+                Once your order is placed, you can track it using the order tracking feature on your profile page or by using the order ID provided in your confirmation email.
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question">
+                What is your return policy?
+                <span class="toggle-icon">+</span>
+            </div>
+            <div class="faq-answer">
+                We offer returns within 30 days of delivery for unused items in their original packaging. Please refer to our Returns & Refunds page for detailed information.
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question">
+                How do I change my password?
+                <span class="toggle-icon">+</span>
+            </div>
+            <div class="faq-answer">
+                You can change your password from your profile page. Go to your profile, click on the "Change Password" tab, and follow the instructions.
+            </div>
+        </div>
+    </div>
+
+    <div class="contact-section">
+        <h3>Still need help?</h3>
+        <p>If you couldn't find the answer to your question, feel free to contact us.</p>
+        <a href="{% url 'contact' %}" class="btn btn-success">Contact Us</a>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const faqQuestions = document.querySelectorAll('.faq-question');
+
+        faqQuestions.forEach(question => {
+            question.addEventListener('click', function() {
+                const answer = this.nextElementSibling;
+                const icon = this.querySelector('.toggle-icon');
+
+                if (answer.style.display === 'block') {
+                    answer.style.display = 'none';
+                    icon.textContent = '+';
+                } else {
+                    answer.style.display = 'block';
+                    icon.textContent = '-';
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

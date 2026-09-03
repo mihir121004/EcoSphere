@@ -55,6 +55,10 @@
                         </span>
                     </a>
 
+                    <a href="{% url 'profile' %}" class="btn btn-outline-success me-2">
+                        Profile
+                    </a>
+
                    <form action="{% url 'logout'%}" method="POST">
                     {% csrf_token %}
                     <button class="btn btn-danger" type="submit">

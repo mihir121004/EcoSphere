@@ -1,0 +1,141 @@
+{% extends 'store/base.html' %}
+{% load static %}
+
+{% block title %}Shipping & Delivery - EcoSphere{% endblock %}
+
+{% block css %}
+<style>
+    .shipping-container {
+        max-width: 1200px;
+        margin: 2rem auto;
+        padding: 0 1rem;
+    }
+    .shipping-header {
+        background: linear-gradient(135deg, #28a745, #20c997);
+        color: white;
+        padding: 2rem;
+        border-radius: 10px;
+        margin-bottom: 2rem;
+        text-align: center;
+    }
+    .shipping-info {
+        background: white;
+        padding: 2rem;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        margin-bottom: 2rem;
+    }
+    .info-section {
+        margin-bottom: 2rem;
+    }
+    .info-section h3 {
+        color: #28a745;
+        margin-bottom: 1rem;
+        border-bottom: 2px solid #e9ecef;
+        padding-bottom: 0.5rem;
+    }
+    .highlight-box {
+        background: #f8f9fa;
+        padding: 1rem;
+        border-left: 4px solid #28a745;
+        margin-bottom: 1rem;
+    }
+    .shipping-options {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+    .option-card {
+        background: #f8f9fa;
+        padding: 1.5rem;
+        border-radius: 8px;
+        border: 1px solid #e9ecef;
+        text-align: center;
+    }
+    .option-card h4 {
+        color: #28a745;
+        margin-bottom: 0.5rem;
+    }
+    .option-card .price {
+        font-weight: bold;
+        font-size: 1.25rem;
+        color: #198754;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="shipping-container">
+    <div class="shipping-header">
+        <h1>Shipping & Delivery</h1>
+        <p>Learn about our shipping options and delivery times</p>
+    </div>
+
+    <div class="shipping-info">
+        <div class="info-section">
+            <h3>Shipping Options</h3>
+            <div class="shipping-options">
+                <div class="option-card">
+                    <h4>Standard Shipping</h4>
+                    <p>Delivery within 5-7 business days</p>
+                    <div class="price">₹50</div>
+                    <small>Free on orders over ₹500</small>
+                </div>
+                <div class="option-card">
+                    <h4>Express Shipping</h4>
+                    <p>Delivery within 2-3 business days</p>
+                    <div class="price">₹100</div>
+                    <small>Free on orders over ₹1000</small>
+                </div>
+                <div class="option-card">
+                    <h4>Overnight Shipping</h4>
+                    <p>Next business day delivery</p>
+                    <div class="price">₹200</div>
+                    <small>Available in select areas</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-section">
+            <h3>Delivery Information</h3>
+            <div class="highlight-box">
+                <strong>Order Processing:</strong> Orders are typically processed within 1-2 business days after payment confirmation.
+            </div>
+            <div class="highlight-box">
+                <strong>Delivery Areas:</strong> We currently deliver to all major cities and towns across India. Rural areas may have extended delivery times.
+            </div>
+            <p>Once your order ships, you'll receive a tracking number via email and SMS. You can track your package status on our website or through the carrier's tracking system.</p>
+        </div>
+
+        <div class="info-section">
+            <h3>International Shipping</h3>
+            <p>We offer international shipping to select countries. Shipping costs and delivery times vary by destination. Customs duties and taxes may apply and are the responsibility of the recipient.</p>
+            <div class="highlight-box">
+                <strong>Estimated Delivery:</strong> 7-14 business days depending on the destination country.
+            </div>
+        </div>
+
+        <div class="info-section">
+            <h3>Order Tracking</h3>
+            <p>You can track your order status in real-time using the tracking number provided in your shipping confirmation email. For any delivery issues, please contact our customer support team.</p>
+        </div>
+
+        <div class="info-section">
+            <h3>Delivery Issues</h3>
+            <p>If you encounter any issues with your delivery:</p>
+            <ul>
+                <li>Contact us within 48 hours of expected delivery</li>
+                <li>Provide your order number and tracking information</li>
+                <li>We'll work with the carrier to resolve the issue</li>
+            </ul>
+        </div>
+
+        <div class="info-section">
+            <h3>Contact Us</h3>
+            <p>If you have any questions about shipping or delivery, please don't hesitate to contact our support team.</p>
+            <a href="{% url 'contact' %}" class="btn btn-success">Contact Support</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

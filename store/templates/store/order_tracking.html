@@ -1,0 +1,447 @@
+{% extends "store/base.html" %}
+{% load static %}
+
+{% block title %}Order Tracking - EcoSphere{% endblock %}
+
+{% block css %}
+<style>
+    .tracking-header {
+        background: linear-gradient(135deg, #198754 0%, #28a745 100%);
+        color: white;
+        padding: 3rem 0;
+        margin-bottom: 3rem;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .tracking-header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+
+    .tracking-header h1 {
+        position: relative;
+        z-index: 1;
+        font-size: 2.5rem;
+        font-weight: 700;
+    }
+
+    .order-details-card {
+        background: white;
+        border-radius: 1rem;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        border: 1px solid #e9ecef;
+        overflow: hidden;
+        margin-bottom: 2rem;
+    }
+
+    .order-details-card .card-header {
+        background: linear-gradient(135deg, #198754 0%, #28a745 100%);
+        color: white;
+        padding: 1.5rem 2rem;
+        border: none;
+    }
+
+    .order-details-card .card-body {
+        padding: 2rem;
+    }
+
+    .order-info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .info-item {
+        background: #f8f9fa;
+        padding: 1rem;
+        border-radius: 0.5rem;
+        border-left: 4px solid #198754;
+    }
+
+    .info-item h6 {
+        color: #198754;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        font-size: 0.875rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .info-item p {
+        margin: 0;
+        font-weight: 500;
+        color: #212529;
+    }
+
+    .status-badge {
+        padding: 0.5rem 1rem;
+        border-radius: 2rem;
+        font-weight: 600;
+        font-size: 0.875rem;
+    }
+
+    .status-pending { background: #fff3cd; color: #856404; }
+    .status-confirmed { background: #d1ecf1; color: #0c5460; }
+    .status-shipped { background: #d4edda; color: #155724; }
+    .status-delivered { background: #d1ecf1; color: #0c5460; }
+
+    .order-items-table {
+        background: white;
+        border-radius: 0.75rem;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        margin-bottom: 2rem;
+    }
+
+    .order-items-table .table {
+        margin: 0;
+    }
+
+    .order-items-table thead th {
+        background: #f8f9fa;
+        border-bottom: 2px solid #dee2e6;
+        font-weight: 600;
+        color: #495057;
+        padding: 1rem;
+    }
+
+    .order-items-table tbody td {
+        padding: 1rem;
+        vertical-align: middle;
+        border-bottom: 1px solid #f1f3f4;
+    }
+
+    .order-items-table tfoot th {
+        background: #f8f9fa;
+        border-top: 2px solid #dee2e6;
+        font-weight: 700;
+        color: #198754;
+        font-size: 1.1rem;
+    }
+
+    .progress-card {
+        background: white;
+        border-radius: 1rem;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        border: 1px solid #e9ecef;
+        position: sticky;
+        top: 2rem;
+    }
+
+    .progress-card .card-header {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        border-bottom: 1px solid #dee2e6;
+        padding: 1.5rem 2rem;
+    }
+
+    .progress-card .card-body {
+        padding: 2rem;
+    }
+
+    .progress-steps {
+        position: relative;
+    }
+
+    .progress-steps::before {
+        content: '';
+        position: absolute;
+        top: 2rem;
+        left: 2rem;
+        width: 2px;
+        height: calc(100% - 4rem);
+        background: #e9ecef;
+        z-index: 1;
+    }
+
+    .step {
+        display: flex;
+        align-items: flex-start;
+        margin-bottom: 2rem;
+        position: relative;
+        z-index: 2;
+    }
+
+    .step:last-child {
+        margin-bottom: 0;
+    }
+
+    .step-icon {
+        width: 3rem;
+        height: 3rem;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 1rem;
+        font-size: 1.2rem;
+        border: 3px solid #e9ecef;
+        background: white;
+        transition: all 0.3s ease;
+    }
+
+    .step.completed .step-icon {
+        background: #198754;
+        border-color: #198754;
+        color: white;
+    }
+
+    .step.completed .step-icon i {
+        color: white;
+    }
+
+    .step-content h6 {
+        margin: 0 0 0.25rem 0;
+        font-weight: 600;
+        color: #212529;
+    }
+
+    .step-content small {
+        color: #6c757d;
+        font-size: 0.875rem;
+    }
+
+    .step.completed .step-content h6 {
+        color: #198754;
+    }
+
+    .action-buttons {
+        margin-top: 2rem;
+        padding-top: 2rem;
+        border-top: 1px solid #e9ecef;
+    }
+
+    .btn-invoice {
+        background: linear-gradient(135deg, #198754 0%, #28a745 100%);
+        border: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: 0.5rem;
+        color: white;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: all 0.3s ease;
+    }
+
+    .btn-invoice:hover {
+        background: linear-gradient(135deg, #146c43 0%, #198754 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(25, 135, 84, 0.3);
+        color: white;
+        text-decoration: none;
+    }
+
+    @media (max-width: 768px) {
+        .tracking-header {
+            padding: 2rem 0;
+        }
+
+        .tracking-header h1 {
+            font-size: 2rem;
+        }
+
+        .order-details-card .card-body,
+        .progress-card .card-body {
+            padding: 1.5rem;
+        }
+
+        .order-info-grid {
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+
+        .progress-card {
+            position: static;
+            margin-top: 2rem;
+        }
+
+        .step {
+            margin-bottom: 1.5rem;
+        }
+
+        .progress-steps::before {
+            left: 1.5rem;
+            height: calc(100% - 3rem);
+        }
+
+        .step-icon {
+            width: 2.5rem;
+            height: 2.5rem;
+            font-size: 1rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="tracking-header">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 text-center">
+                <h1><i class="bi bi-truck me-3"></i>Order Tracking</h1>
+                <p class="mb-0 fs-5">Track your order status and delivery progress</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5">
+    <div class="container">
+        <div class="row g-4">
+            <!-- Order Details -->
+            <div class="col-lg-8">
+                <div class="order-details-card">
+                    <div class="card-header">
+                        <h4 class="mb-0">
+                            <i class="bi bi-receipt me-2"></i>
+                            Order #{{ order.order_id }}
+                        </h4>
+                    </div>
+                    <div class="card-body">
+                        <!-- Order Information -->
+                        <div class="order-info-grid">
+                            <div class="info-item">
+                                <h6>Order Date</h6>
+                                <p>{{ order.created_at|date:"M d, Y" }}</p>
+                            </div>
+                            <div class="info-item">
+                                <h6>Status</h6>
+                                <p>
+                                    <span class="status-badge status-{{ order.status }}">
+                                        {{ order.get_status_display }}
+                                    </span>
+                                </p>
+                            </div>
+                            <div class="info-item">
+                                <h6>Payment Method</h6>
+                                <p>{{ order.get_payment_method_display }}</p>
+                            </div>
+                            <div class="info-item">
+                                <h6>Payment Status</h6>
+                                <p>
+                                    <span class="status-badge {% if order.payment_status == 'SUCCESS' %}status-delivered{% else %}status-pending{% endif %}">
+                                        {{ order.payment_status }}
+                                    </span>
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Order Items -->
+                        <h5 class="mb-3">
+                            <i class="bi bi-bag me-2"></i>
+                            Order Items
+                        </h5>
+                        <div class="order-items-table">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Product</th>
+                                        <th>Quantity</th>
+                                        <th>Price</th>
+                                        <th>Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for item in order_items %}
+                                    <tr>
+                                        <td>
+                                            <div class="fw-semibold">{{ item.product.name }}</div>
+                                        </td>
+                                        <td>{{ item.quantity }}</td>
+                                        <td>₹{{ item.price }}</td>
+                                        <td class="fw-semibold">₹{{ item.subtotal }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th colspan="3">Total</th>
+                                        <th>₹{{ order.total }}</th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="action-buttons">
+                            <a href="{% url 'invoice' order.order_id %}" class="btn-invoice">
+                                <i class="bi bi-receipt"></i>
+                                View Invoice
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Order Progress -->
+            <div class="col-lg-4">
+                <div class="progress-card">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <i class="bi bi-graph-up me-2"></i>
+                            Order Progress
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="progress-steps">
+                            <div class="step {% if order.status in 'pending,confirmed,shipped,delivered' %}completed{% endif %}">
+                                <div class="step-icon">
+                                    <i class="bi bi-check-circle-fill"></i>
+                                </div>
+                                <div class="step-content">
+                                    <h6>Order Placed</h6>
+                                    <small>{{ order.created_at|date:"M d, Y H:i" }}</small>
+                                </div>
+                            </div>
+                            <div class="step {% if order.status in 'confirmed,shipped,delivered' %}completed{% endif %}">
+                                <div class="step-icon">
+                                    <i class="bi bi-check-circle-fill"></i>
+                                </div>
+                                <div class="step-content">
+                                    <h6>Order Confirmed</h6>
+                                    <small>{% if order.status in 'confirmed,shipped,delivered' %}Order confirmed{% else %}Pending confirmation{% endif %}</small>
+                                </div>
+                            </div>
+                            <div class="step {% if order.status in 'shipped,delivered' %}completed{% endif %}">
+                                <div class="step-icon">
+                                    <i class="bi bi-truck"></i>
+                                </div>
+                                <div class="step-content">
+                                    <h6>Shipped</h6>
+                                    <small>{% if order.status in 'shipped,delivered' %}Out for delivery{% else %}Preparing for shipment{% endif %}</small>
+                                </div>
+                            </div>
+                            <div class="step {% if order.status == 'delivered' %}completed{% endif %}">
+                                <div class="step-icon">
+                                    <i class="bi bi-box-seam"></i>
+                                </div>
+                                <div class="step-content">
+                                    <h6>Delivered</h6>
+                                    <small>{% if order.status == 'delivered' %}Package delivered{% else %}Awaiting delivery{% endif %}</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    // Add any interactive features here if needed
+    console.log("Order tracking page loaded");
+});
+</script>
+{% endblock %}

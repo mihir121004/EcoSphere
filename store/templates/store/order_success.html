@@ -18,7 +18,7 @@
                         <h5 class="fw-bold mb-3">Order Details</h5>
                         <div class="d-flex justify-content-between mb-2">
                             <span class="text-muted">Order ID</span>
-                            <span class="fw-semibold">#{{ order.id }}</span>
+                            <span class="fw-semibold">{{ order.order_id }}</span>
                         </div>
                         <div class="d-flex justify-content-between mb-2">
                             <span class="text-muted">Order Date</span>
@@ -38,7 +38,7 @@
                         <hr>
                         <div class="d-flex justify-content-between fw-bold fs-5">
                             <span>Total Paid</span>
-                            <span class="text-success">₹{{ order.total_amount }}</span>
+                            <span class="text-success">₹{{ order.total }}</span>
                         </div>
                     </div>
 

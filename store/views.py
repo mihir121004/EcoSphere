@@ -275,6 +275,16 @@ def place_order(request):
     if request.method != "POST":
         return redirect("checkout")
 
+    first_name = request.POST.get('first_name', '').strip()
+    last_name = request.POST.get('last_name', '').strip()
+    email = request.POST.get('email', '').strip()
+    phone = request.POST.get('phone', '').strip()
+    address = request.POST.get('address', '').strip()
+    city = request.POST.get('city', '').strip()
+    state = request.POST.get('state', '').strip()
+    pincode = request.POST.get('pincode', '').strip()
+    payment_method = request.POST.get('payment_method', 'cod')
+
     cart = Cart.objects.filter(user=request.user).first()
     if not cart or not cart.items.exists():
         messages.error(request, "Your cart is empty.")
@@ -282,8 +292,19 @@ def place_order(request):
 
     total = sum(item.subtotal() for item in cart.items.all())
 
-    order = Order.objects.create(user=request.user, total_amount=total)
-
+    order = Order.objects.create(
+        user=request.user,
+        first_name=first_name,
+        last_name=last_name,
+        email=email,
+        phone=phone,
+        address=address,
+        city=city,
+        state=state,
+        pincode=pincode,
+        payment_method=payment_method,
+        total=total,
+    )
 
     for item in cart.items.all():
         OrderItem.objects.create(
@@ -296,23 +317,24 @@ def place_order(request):
         # Decrement stock
         product = item.product
         if product.stock >= item.quantity:
-
-
             product.stock -= item.quantity
             product.save()
         else:
             product.is_available = False
             product.save()
 
-
-
-
     cart.items.all().delete()
 
+    # Demo payment flow: UPI/card are "paid" instantly, COD stays pending
+    if payment_method in ('upi', 'card'):
+        order.payment_status = 'SUCCESS'
+        order.status = 'confirmed'
+        order.save()
+        messages.success(request, "Payment successful (demo)! Order placed.")
+    else:
+        messages.success(request, "Order placed successfully!")
 
-    messages.success(request, f"Order placed successfully! Order ID: #{order.id}.")
-
-    return redirect("order_success", order_id=order.id)
+    return redirect('order_tracking', order_id=order.order_id)
 
 
 # ======================
@@ -324,6 +346,83 @@ def order_success(request, order_id):
 
 
     return render(request, "store/order_success.html", {"order": order})
+
+
+# ======================
+# Order Tracking
+# ======================
+@login_required
+def order_tracking(request, order_id):
+    try:
+        order = Order.objects.get(order_id=order_id, user=request.user)
+    except Order.DoesNotExist:
+        messages.error(request, "Order not found.")
+        return redirect("home")
+
+    return render(request, "store/order_tracking.html", {
+        "order": order,
+        "order_items": order.items.all(),
+    })
+
+
+# ======================
+# Invoice
+# ======================
+@login_required
+def invoice(request, order_id):
+    try:
+        order = Order.objects.get(order_id=order_id, user=request.user)
+    except Order.DoesNotExist:
+        messages.error(request, "Order not found.")
+        return redirect("home")
+
+    return render(request, "store/invoice.html", {
+        "order": order,
+        "order_items": order.items.all(),
+    })
+
+
+# ======================
+# Profile
+# ======================
+@login_required
+def profile(request):
+    current_orders = Order.objects.filter(
+        user=request.user
+    ).exclude(status='delivered').order_by('-created_at')
+
+    previous_orders = Order.objects.filter(
+        user=request.user,
+        status='delivered'
+    ).order_by('-updated_at')
+
+    return render(request, 'store/profile.html', {
+        'current_orders': current_orders,
+        'previous_orders': previous_orders,
+    })
+
+
+# ======================
+# Info / legal pages
+# ======================
+def help_center(request):
+    return render(request, 'store/help_center.html')
+
+
+def shipping_delivery(request):
+    return render(request, 'store/shipping_delivery.html')
+
+
+def returns_refunds(request):
+    return render(request, 'store/returns_refunds.html')
+
+
+def privacy_policy(request):
+    return render(request, 'store/privacy_policy.html')
+
+
+def terms_conditions(request):
+    return render(request, 'store/terms_conditions.html')
 # ======================
 # Contact
 # ======================

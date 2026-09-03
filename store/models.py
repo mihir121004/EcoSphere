@@ -157,33 +157,65 @@ class Wishlist(models.Model):
 class Order(models.Model):
 
     STATUS_CHOICES = [
-        ('Pending', 'Pending'),
-        ('Confirmed', 'Confirmed'),
-        ('Shipped', 'Shipped'),
-        ('Delivered', 'Delivered'),
-        ('Cancelled', 'Cancelled'),
+        ('pending', 'Pending'),
+        ('confirmed', 'Confirmed'),
+        ('shipped', 'Shipped'),
+        ('delivered', 'Delivered'),
+    ]
+
+    PAYMENT_CHOICES = [
+        ('cod', 'Cash on Delivery'),
+        ('upi', 'UPI'),
+        ('card', 'Card'),
     ]
 
     user = models.ForeignKey(
         User,
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
+        related_name="orders"
     )
 
-    total_amount = models.DecimalField(
-        max_digits=10,
-        decimal_places=2
+    order_id = models.CharField(max_length=20, unique=True, blank=True)
+
+    # Billing / shipping details captured at checkout
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
+    email = models.EmailField()
+    phone = models.CharField(max_length=15)
+    address = models.TextField()
+    city = models.CharField(max_length=100)
+    state = models.CharField(max_length=100)
+    pincode = models.CharField(max_length=10)
+
+    payment_method = models.CharField(
+        max_length=10,
+        choices=PAYMENT_CHOICES,
+        default='cod'
     )
+    payment_status = models.CharField(max_length=20, default='pending')
 
     status = models.CharField(
         max_length=20,
         choices=STATUS_CHOICES,
-        default='Pending'
+        default='pending'
+    )
+
+    total = models.DecimalField(
+        max_digits=10,
+        decimal_places=2
     )
 
     created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def save(self, *args, **kwargs):
+        # Generate a human-friendly order id (ORD000001) once
+        if not self.order_id:
+            self.order_id = f"ORD{self.pk:06d}" if self.pk else f"ORD{Order.objects.count() + 1:06d}"
+        super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"Order #{self.id}"
+        return f"Order {self.order_id}"
 
 
 # =========================

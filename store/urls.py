@@ -21,6 +21,16 @@ urlpatterns = [
     path('checkout/', views.checkout, name='checkout'),
     path('place-order/', views.place_order, name='place_order'),
     path('order-success/<int:order_id>/', views.order_success, name='order_success'),
+    path('order-tracking/<str:order_id>/', views.order_tracking, name='order_tracking'),
+    path('invoice/<str:order_id>/', views.invoice, name='invoice'),
+    path('profile/', views.profile, name='profile'),
+    path('password_change/', auth_views.PasswordChangeView.as_view(
+        template_name='store/password_change.html', success_url='/profile/'), name='password_change'),
+    path('help-center/', views.help_center, name='help_center'),
+    path('shipping-delivery/', views.shipping_delivery, name='shipping_delivery'),
+    path('returns-refunds/', views.returns_refunds, name='returns_refunds'),
+    path('privacy-policy/', views.privacy_policy, name='privacy_policy'),
+    path('terms-conditions/', views.terms_conditions, name='terms_conditions'),
     path('help/', views.help, name='help'),
     path('subscription/', views.subscription, name='subscription'),
 ]
