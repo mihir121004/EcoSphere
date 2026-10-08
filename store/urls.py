@@ -9,6 +9,7 @@ from django.contrib.auth.views import PasswordChangeView
 
 urlpatterns = [
     path('', views.homepage, name='home'),
+    path('health/', views.health_check, name='health_check'),
     path('shop/', views.shop, name='shop'),
     path('about/', views.about, name='about'),
     path('categories/', views.categories, name='categories'),

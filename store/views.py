@@ -9,6 +9,7 @@ from django.conf import settings
 from .models import ContactMessage
 from .models import Product, Cart, CartItem
 from django.http import JsonResponse
+from django.views.decorators.http import require_http_methods
 
 
 
@@ -22,6 +23,17 @@ def homepage(request):
     return render(request, "store/homepage.html",{
         "featured_products": featured_products
     })
+
+
+@require_http_methods(["GET"])
+def health_check(request):
+    """
+    Lightweight health-check endpoint for uptime monitoring (e.g., UptimeRobot).
+    Returns 200 OK with minimal JSON. No auth, no DB queries, no sensitive data.
+    """
+    return JsonResponse({"status": "ok"})
+
+
 def shop(request):
     category_id = request.GET.get('category')
     price_range = request.GET.get('price_range')
