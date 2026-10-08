@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: ecosphere-django
+    name: ecosphere-shop-django
     runtime: python
     plan: free
     buildCommand: "./build.sh"
