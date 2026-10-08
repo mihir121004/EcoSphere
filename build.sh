@@ -6,6 +6,18 @@ pip install --upgrade pip
 pip install -r requirements.txt
 
 python manage.py collectstatic --no-input
+
+# Wait for database to be ready (Render internal DNS may need a moment)
+echo "Waiting for database..."
+for i in {1..30}; do
+  if python manage.py migrate --check 2>/dev/null; then
+    echo "Database ready"
+    break
+  fi
+  echo "Attempt $i: database not ready, waiting 2s..."
+  sleep 2
+done
+
 python manage.py migrate
 
 # Seed the catalogue (idempotent: products that already exist are skipped)
